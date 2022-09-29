@@ -2,6 +2,8 @@ const axios = require ("axios");
 const jsdom = require("jsdom");
 const {JSDOM} = jsdom;
 const nodemailer = require("nodemailer");
+const schedule = require('node-schedule');
+
 const config = {
     urls: [
         {
@@ -114,4 +116,5 @@ function findAvailableBikes() {
     config.urls.forEach(url => findBike(url));
 }
 
-return findAvailableBikes();
+
+setInterval(findAvailableBikes, 5000);
