@@ -2,7 +2,6 @@ const axios = require ("axios");
 const jsdom = require("jsdom");
 const {JSDOM} = jsdom;
 const nodemailer = require("nodemailer");
-const schedule = require('node-schedule');
 
 const config = {
     urls: [
