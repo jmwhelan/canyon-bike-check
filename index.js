@@ -4,43 +4,6 @@ const {JSDOM} = jsdom;
 const nodemailer = require("nodemailer");
 const fs = require('fs');
 
-const configold = {
-    urls: [
-        {
-            label:"Speedmax CFR Disc Di2",
-            url: "https://www.canyon.com/en-ca/road-bikes/triathlon-bikes/speedmax/cfr/speedmax-cfr-disc-di2/2921.html?dwvar_2921_pv_rahmenfarbe=SR%2FBK"
-        },
-        {
-            label:"Speedmax CFR Disc LTD",
-            url: "https://www.canyon.com/en-ca/road-bikes/triathlon-bikes/speedmax/cfr/speedmax-cfr-disc-ltd/3028.html?dwvar_3028_pv_rahmenfarbe=BK%2FBK"
-        },
-        {
-            label:"Speedmax CFR Disc eTap",
-            url: "https://www.canyon.com/en-ca/road-bikes/triathlon-bikes/speedmax/cfr/speedmax-cfr-disc-etap/3065.html?dwvar_3065_pv_rahmenfarbe=BU%2FBK"
-        },
-        {
-            label:"Speedmax CFR Disc LTD",
-            url: "https://www.canyon.com/en-ca/road-bikes/triathlon-bikes/speedmax/cfr/speedmax-cfr-disc-di2/2921.html?dwvar_2921_pv_rahmenfarbe=SR%2FBK"
-        },
-            {
-                label: "Neuron 6 Blue",
-                url: "https://www.canyon.com/en-ca/mountain-bikes/trail-bikes/neuron/al/neuron-6/3156.html?dwvar_3156_pv_rahmenfarbe=BU"
-            },
-            {
-                label: "Neuron 5 Grey",
-                url: "https://www.canyon.com/en-ca/mountain-bikes/trail-bikes/neuron/al/neuron-5/3155.html?dwvar_3155_pv_rahmenfarbe=GY%2FBK"
-            },
-            {   
-                label: "Neuron 5 Red",
-                url: "https://www.canyon.com/en-ca/mountain-bikes/trail-bikes/neuron/al/neuron-5/3155.html?dwvar_3155_pv_rahmenfarbe=RD"
-            }
-        ],
-    sizes: [
-        "S", "M"
-    ]
-    
-}
-
 let config;
 
 fs.readFile('bikes.json', 'utf-8', (err, data) => {
@@ -59,7 +22,7 @@ const TOEMAIL = process.env.TOEMAIL;
 const FROMNAME = process.env.FROMNAME;
 const USERNAME = process.env.GMAILUSER;
 const PASSWORD = process.env.GMAILPASSWORD;
-const TIMEOUT = process.send.TIMEOUT;
+const TIMEOUT = process.env.TIMEOUT;
 
 async function getBikePage(url) {
     
