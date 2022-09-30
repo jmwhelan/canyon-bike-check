@@ -2,8 +2,9 @@ const axios = require ("axios");
 const jsdom = require("jsdom");
 const {JSDOM} = jsdom;
 const nodemailer = require("nodemailer");
+const fs = require('fs');
 
-const config = {
+const configold = {
     urls: [
         {
             label:"Speedmax CFR Disc Di2",
@@ -40,10 +41,25 @@ const config = {
     
 }
 
+let config;
+
+fs.readFile('bikes.json', 'utf-8', (err, data) => {
+    if (err) {
+        throw err;
+    }
+
+    // parse JSON object
+    config = JSON.parse(data.toString());
+
+    // print JSON object
+    console.log(config);
+});
+
 const TOEMAIL = process.env.TOEMAIL;
 const FROMNAME = process.env.FROMNAME;
 const USERNAME = process.env.GMAILUSER;
 const PASSWORD = process.env.GMAILPASSWORD;
+const TIMEOUT = process.send.TIMEOUT;
 
 async function getBikePage(url) {
     
@@ -82,11 +98,15 @@ async function findBike(url) {
         desiredSizes.forEach(async size => 
             {
                 console.log(`${url.label} is available in size ${size}`);
-                notifyAvailableBike(url.label, size);
+                await notifyAvailableBike(url.label, size);
+                return true;
             });
     } else {
         console.log(`${url.label} not available in desired sizes`);
+        return false;
     }
+
+    return true;
 }
 
 async function notifyAvailableBike(bike, size){
@@ -112,8 +132,32 @@ async function notifyAvailableBike(bike, size){
 }
 
 function findAvailableBikes() {
-    config.urls.forEach(url => findBike(url));
+    config.urls.forEach(bike => {
+        (async() => {
+            if (bike.found === false){
+                let bikeFound = await findBike(bike);
+                if (bikeFound) {
+                    bike.found = true;
+                    console.log(bikeFound);
+                }
+            } else {
+                console.log(bike.found);
+            }
+            
+        })(); 
+
+        }
+    );
+    const data = JSON.stringify(config, null, 4);
+
+// write JSON string to a file
+fs.writeFile('bikes.json', data, (err) => {
+    if (err) {
+        throw err;
+    }
+    console.log("JSON data is saved.");
+});
 }
 
 
-setInterval(findAvailableBikes, 5000);
+setInterval(findAvailableBikes, TIMEOUT);
